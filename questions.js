@@ -25,7 +25,7 @@ let questionsData = [
     ]
   },
   {
-    "question": "Write a function sumArray that takes an array of integers as input and returns the sum of all the integers in the array. For example, if the input array is [1, 2, 3, 4, 5], the output should be 15 (which is the sum of all the integers in the array). \n If input is not an array return \"Input is not an array\" . Otherwise if there are non numeric characters in array return \Array contains non-numeric values\".",
+    "question": "Write a function sumArray that takes an array of integers as input and returns the sum of all the integers in the array. For example, if the input array is [1, 2, 3, 4, 5], the output should be 15 (which is the sum of all the integers in the array). \n If input is not an array return \"Input is not an array\" . Otherwise if there are non numeric characters in array return \"Array contains non-numeric values\".",
     "testcasesList": [
       {
         "input": [1, 2, 3, 4, 5],
