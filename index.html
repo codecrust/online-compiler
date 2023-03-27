@@ -26,24 +26,32 @@
 <body>
 
     <div class="uk-container">
-        <div class="uk-card uk-card-body uk-card-secondary">
+        <div class="uk-card uk-card-body uk-card-primary">
 
-            <h2 class="uk-card-title">Candidate Screening <br><sub><small> Powered by <a>AITA
-                            Technologies</a></small></sub></h2>
+            <div class="uk-flex uk-flex-1 uk-flex-between">
+                <div class="uk-card-title">
+                    <b>ScreenByte</b><br>
+                    <small>-AI Powered Screening Platforms</small>
+                </div>
+                <div> <button class="uk-button uk-button-default">Developed By AITA Tecnhologies <i class="fa fa-heart"
+                            aria-hidden="true"> </i>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="uk-flex">
+        <div class="uk-flex uk-flex-1 uk-flex-around">
 
             <!-- <h3>Question</h3> -->
-            <div class="uk-flex uk-flex-column uk-flex-1">
-                <div id="question" class="uk-card uk-card-body uk-card-primary">
+            <div class="uk-flex uk-flex-column uk-flex-1 uk-flex-around">
+                <div id="question" class="uk-card uk-card-body uk-card-default">
                     <h4>Question</h4>
                     <div id="questionDiv"></div>
 
                 </div>
-                <br>
-                <div>
-                    Source Code: <select id="lang">
+                <div class="uk-card uk-card-body uk-card-default">
+                    Source Code:
+                    <select id="lang">
                         <option>Bash</option>
                         <option>C#</option>
                         <option selected>JavaScript</option>
@@ -53,30 +61,30 @@
                         <option>Ruby</option>
                     </select>
                 </div>
-                <br>
 
                 <div>
-                    <textarea id="source" style="width:100%;height: 150%;" onpaste="return false;" >
-    </textarea>
                     <button id="run" onclick="runBatched()">▶️ Run (Ctrl + Enter)</button>
 
-                    <small style="width: 50%; text-align: center; color: #ccc;">Made by Shubham Garg</p>
+                    <textarea class="uk-card uk-card-body uk-card-default" id="source" style="width:100%;height: 150%;">
+                        <!-- onpaste="return false; -->
+    </textarea>
+                    <br>
+
 
                 </div>
 
 
             </div>
 
-            <div class="uk-flex uk-flex-column">
-
-                <div id="testCases" class="uk-card uk-card-body">
+            <div class="uk-flex uk-flex-column uk-flex-1 uk-flex-around">
+                <div id="testCases" class="uk-card uk-card-body uk-card-default">
                     <h4>Test Cases</h4>
                     <div id="testCaseDiv"></div>
                 </div>
 
                 <div>
-                    <h4>Output</h4>
-                    <textarea readonly id="output" style="width:100%;height: 100%;"></textarea>
+                    <textarea class="uk-card uk-card-body uk-card-default" readonly id="output"
+                        style="width:100%;height: 100%;"></textarea>
                 </div>
             </div>
         </div>

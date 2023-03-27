@@ -1,18 +1,19 @@
 API_KEY = "e81b1c7bf8mshcb853477b02ef3ap1e5a73jsn45c6c7f5cdcb"
 //"3a741d4f13msh46af1ea44bc1bdcp1bf020jsnf18723627030";
 
-console.log("hello world")
 
-console.log(questionsData)
+//console.log(questionsData)
 //import json from questions.json
-let questionObj = questionsData[0]
-console.log(questionObj)
+//select random question
+let randomQuestionIndex = Math.floor(Math.random() * questionsData.length)
+let questionObj = questionsData[randomQuestionIndex]
+//console.log(questionObj)
 let question = questionObj.question
 
 //iterate questionObj.testcasesList and create testCasesObjAr
 let testCasesObjAr = []
 
-for(let i=0; i<questionObj.testcasesList.length; i++){
+for (let i = 0; i < questionObj.testcasesList.length; i++) {
     testCasesObjAr.push({
         input: questionObj.testcasesList[i].input,
         expectedOutput: questionObj.testcasesList[i].output,
@@ -34,50 +35,49 @@ console.log(testCasesObjAr)
 //         token: "",
 //         result: "Pending"
 //     }]
-    // {
-    //     input: "mango",
-    //     expectedOutput: "mango",
-    //     output: "-",
-    //     token: "",
-    //     result: "Pending"
-    // },
-    // {
-    //     input: 11,
-    //     expectedOutput: 11,
-    //     output: "-",
-    //     token: "",
-    //     result: "Pending"
-    // }, {
-    //     input: [11, 12, 13],
-    //     expectedOutput: JSON.stringify([11, 12, 13]),
-    //     output: "-",
-    //     token: "",
-    //     result: "Pending"
-    // }, {
-    //     input: [],
-    //     expectedOutput: JSON.stringify([]),
-    //     output: "-",
-    //     token: "",
-    //     result: "Pending"
-    // }, {
-    //     input: 1.2324,
-    //     expectedOutput: 1.2324,
-    //     output: "-",
-    //     token: "",
-    //     result: "Pending"
-    // }, {
-    //     input: 'a',
-    //     expectedOutput: 'a',
-    //     output: "-",
-    //     token: "",
-    //     result: "Pending"
-    // }, 
-   
+// {
+//     input: "mango",
+//     expectedOutput: "mango",
+//     output: "-",
+//     token: "",
+//     result: "Pending"
+// },
+// {
+//     input: 11,
+//     expectedOutput: 11,
+//     output: "-",
+//     token: "",
+//     result: "Pending"
+// }, {
+//     input: [11, 12, 13],
+//     expectedOutput: JSON.stringify([11, 12, 13]),
+//     output: "-",
+//     token: "",
+//     result: "Pending"
+// }, {
+//     input: [],
+//     expectedOutput: JSON.stringify([]),
+//     output: "-",
+//     token: "",
+//     result: "Pending"
+// }, {
+//     input: 1.2324,
+//     expectedOutput: 1.2324,
+//     output: "-",
+//     token: "",
+//     result: "Pending"
+// }, {
+//     input: 'a',
+//     expectedOutput: 'a',
+//     output: "-",
+//     token: "",
+//     result: "Pending"
+// }, 
+
 
 //console.log(testCasesObjAr[2].input[2])
 
 let currentSelectedLang = "JavaScript"
-let fnctionName = "testFunction"
 let argsName = "nums"
 
 
@@ -95,7 +95,7 @@ document.getElementById("lang").addEventListener("change", function () {
 function updateSourceCodeArea(lang) {
     if (lang == "JavaScript") {
         document.getElementById("source").value =
-            `function ${fnctionName}(${argsName})\n{\n\t\n}`
+            `function ${questionObj.methodName}(${argsName})\n{\n\t\n}`
     }
 }
 
@@ -160,10 +160,10 @@ function check(token) {
 
             try {
                 console.log(response.stdout)
-             
+
                 stdOut = JSON.stringify(JSON.parse(response.stdout))
             } catch (error) {
-                console.log("error caught") 
+                console.log("error caught")
 
                 stdOut = (response.stdout).trim().toString().trim()
             }
@@ -217,6 +217,8 @@ function check(token) {
 
 
 function checkBatch() {
+
+    pendingCaseFlag = false
     let tokenStr = ""
 
     //iterate on testcasesobjar and add token to tokenStr
@@ -230,7 +232,6 @@ function checkBatch() {
 
     $("#output").val($("#output").val() + "\n⏬ Checking status for..." + tokenStr);
 
-
     //convert above code to fetch
     fetch(`https://judge0-ce.p.rapidapi.com/submissions/batch?tokens=${tokenStr}?base64_encoded=false&fields=stdout,stderr,status_id,language_id`, {
         "method": "GET",
@@ -242,7 +243,6 @@ function checkBatch() {
 
         .then(response => {
             console.log(response)
-
             response = response.submissions
 
             for (let i = 0; i < response.length; i++) {
@@ -261,7 +261,7 @@ function checkBatch() {
                 let token = testCasesObjAr[i].token
 
                 try {
-    
+
                     stdOut = JSON.stringify(JSON.parse(response[i].stdout))
                 } catch (error) {
                     stdOut = response[i].stdout.toString().trim()
@@ -309,7 +309,6 @@ function checkBatch() {
 
         })
         .catch(err => {
-
             console.error(err);
 
         });
@@ -372,7 +371,7 @@ function runBatched() {
 
 
     var myHeaders = new Headers();
-    myHeaders.append("x-rapidapi-host", " judge0-ce.p.rapidapi.com");
+    myHeaders.append("x-rapidapi-host", "judge0-ce.p.rapidapi.com");
     myHeaders.append("x-rapidapi-key", API_KEY);
     myHeaders.append("Content-Type", "application/json");
 
@@ -385,7 +384,7 @@ function runBatched() {
     testCasesObjAr.forEach(testObj => {
         raw.submissions.push({
             "language_id": language_to_id[document.getElementById("lang").value],
-            "source_code": encode(document.getElementById("source").value + `\n console.log(${fnctionName}(JSON.parse(\'${JSON.stringify(testObj.input)}')))`),
+            "source_code": encode(document.getElementById("source").value + `\n console.log(${questionObj.methodName}(JSON.parse(\'${JSON.stringify(testObj.input)}')))`),
             // \"stdin\": encode($(\"#input\").val()),\r\n
             //  \"expected_output\": encodedExpectedOutput,\r\n
             "redirect_stderr_to_stdout": true
@@ -399,11 +398,9 @@ function runBatched() {
         body: JSON.stringify(raw),
         redirect: 'follow'
     };
-
     fetch("https://judge0-ce.p.rapidapi.com/submissions/batch?base64_encoded=true&wait=false", requestOptions)
         .then(response => response.json())
         .then(data => {
-
             console.log(data)
 
             setTimeout(() => {
@@ -432,10 +429,10 @@ function runBatched() {
 $("body").keydown(function (e) {
     if (e.ctrlKey && e.keyCode == 13) {
         // for (var i = 0; i < testCasesObjAr.length; i++) {
-         //   run(testCasesObjAr[6]);
+        //   run(testCasesObjAr[6]);
         // }
 
-         runBatched()
+        runBatched()
 
 
     }
@@ -454,6 +451,7 @@ $("textarea").keydown(function (e) {
     }
 });
 
+let pendingCaseFlag = false
 
 
 
@@ -474,21 +472,23 @@ function addTestCasesTable() {
         </tr>
     </thead>
     <tbody>
+
+
 ${testCasesObjAr.map((testCaseObj) => {
 
 
-  //  console.log("Comparing: " + testCaseObj.expectedOutput + " with " + testCaseObj.output);
+
+
+            //  console.log("Comparing: " + testCaseObj.expectedOutput + " with " + testCaseObj.output);
 
             if ((testCaseObj.expectedOutput) == (testCaseObj.output))
                 testCaseObj.result = "✅"
-            else if (testCaseObj.output == "-" || testCaseObj.output =="processing" || testCaseObj.output =="In Queue" || testCaseObj.output =="compiling" || testCaseObj.output =="running")
+            else if (testCaseObj.output == "-" || testCaseObj.output == "processing" || testCaseObj.output == "In Queue" || testCaseObj.output == "compiling" || testCaseObj.output == "running") {
                 testCaseObj.result = "Pending"
-            else {
-                //console.log((testCaseObj.expectedOutput))
-                //console.log(testCaseObj.output)
+                pendingCaseFlag = true
+            } else {
                 testCaseObj.result = "❌"
             }
-
 
             return `<tr>
     <td>${JSON.stringify(testCaseObj.input)}</td>
@@ -499,9 +499,13 @@ ${testCasesObjAr.map((testCaseObj) => {
         }).join('')
         }
 
-</tbody>
-</table>`
+</tbody >
+</table > `
 
+if(!pendingCaseFlag){
+    //enable run button
+    $("#run").prop("disabled", false);
+}
 
 }
 
