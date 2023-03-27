@@ -5,7 +5,7 @@ console.log("hello world")
 
 console.log(questionsData)
 //import json from questions.json
-let questionObj = questionsData[1]
+let questionObj = questionsData[0]
 console.log(questionObj)
 let question = questionObj.question
 
