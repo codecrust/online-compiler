@@ -5,7 +5,7 @@ console.log("hello world")
 
 console.log(questionsData)
 //import json from questions.json
-let questionObj = questionsData[1]
+let questionObj = questionsData[2]
 console.log(questionObj)
 let question = questionObj.question
 
@@ -491,7 +491,7 @@ ${testCasesObjAr.map((testCaseObj) => {
 
 
             return `<tr>
-    <td>${testCaseObj.input}</td>
+    <td>${JSON.stringify(testCaseObj.input)}</td>
     <td>${testCaseObj.expectedOutput}</td>
     <td>${testCaseObj.output}</td>
     <td>${testCaseObj.result}</td>

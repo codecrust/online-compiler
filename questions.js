@@ -52,6 +52,29 @@ let questionsData = [
         "output": "Input is not an array"
       }
     ]
+  },
+  {
+    "question": "Write a JavaScript function named findDuplicates that takes an array of integers as input and returns an array containing all the duplicate values in the input array. For example, if the input is [1, 2, 3, 2, 4, 5, 3], the function should return [2, 3].",
+    "testcasesList": [    {      "input": [1, 2, 3, 2, 4, 5, 3],
+        "output": JSON.stringify([2, 3])
+      },
+      {
+        "input": [1, 2, 3, 4, 5],
+        "output": JSON.stringify([])
+      },
+      {
+        "input": [1, 1, 1, 1],
+        "output":JSON.stringify([1])
+      },
+      {
+        "input": [],
+        "output": JSON.stringify([])
+      },
+      {
+        "input": [1, 2, 3, 2, 4, 5, 3, 4, 5],
+        "output": JSON.stringify([2, 3, 4, 5])
+      }
+    ]
   }
 ]
 
