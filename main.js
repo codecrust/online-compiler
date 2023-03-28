@@ -5,7 +5,7 @@ API_KEY = "e81b1c7bf8mshcb853477b02ef3ap1e5a73jsn45c6c7f5cdcb"
 //console.log(questionsData)
 //import json from questions.json
 //select random question
-let randomQuestionIndex = 0//Math.floor(Math.random() * questionsData.length)
+let randomQuestionIndex = Math.floor(Math.random() * questionsData.length)
 let questionObj = questionsData[randomQuestionIndex]
 //console.log(questionObj)
 let question = questionObj.question
@@ -24,59 +24,7 @@ for (let i = 0; i < questionObj.testcasesList.length; i++) {
     })
 }
 
-console.log(testCasesObjAr)
 
-
-
-// let testCasesObjAr = [
-//     {
-//         input: ['abc', 'cdb', 'fgv'],
-//         expectedOutput: JSON.parse(JSON.stringify("['abc', 'cdb', 'fgv']\n")).trim(),
-//         output: "-",
-//         token: "",
-//         result: "Pending"
-//     }]
-// {
-//     input: "mango",
-//     expectedOutput: "mango",
-//     output: "-",
-//     token: "",
-//     result: "Pending"
-// },
-// {
-//     input: 11,
-//     expectedOutput: 11,
-//     output: "-",
-//     token: "",
-//     result: "Pending"
-// }, {
-//     input: [11, 12, 13],
-//     expectedOutput: JSON.stringify([11, 12, 13]),
-//     output: "-",
-//     token: "",
-//     result: "Pending"
-// }, {
-//     input: [],
-//     expectedOutput: JSON.stringify([]),
-//     output: "-",
-//     token: "",
-//     result: "Pending"
-// }, {
-//     input: 1.2324,
-//     expectedOutput: 1.2324,
-//     output: "-",
-//     token: "",
-//     result: "Pending"
-// }, {
-//     input: 'a',
-//     expectedOutput: 'a',
-//     output: "-",
-//     token: "",
-//     result: "Pending"
-// }, 
-
-
-//console.log(testCasesObjAr[2].input[2])
 
 let currentSelectedLang = "JavaScript"
 let argsName = "nums"
