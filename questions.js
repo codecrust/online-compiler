@@ -110,23 +110,23 @@ let questionsData = [
     "question": "Write a JavaScript function named mergeSort that takes an array of integers as input and returns a new array that is sorted in ascending order using the merge sort algorithm. For example, if the input is [4, 2, 6, 5, 3], the function should return [2, 3, 4, 5, 6].Note: You may not use the built-in sort() method.",
   "methodName": "mergeSort",
     "testcasesList": [    {      "input": [4, 2, 6, 5, 3],
-        "output": [2, 3, 4, 5, 6]
+        "output": JSON.stringify([2, 3, 4, 5, 6])
       },
       {
         "input": [5, 3, 9, 1, 7],
-        "output": [1, 3, 5, 7, 9]
+        "output": JSON.stringify([1, 3, 5, 7, 9])
       },
       {
         "input": [8, 7, 6, 5, 4, 3, 2, 1],
-        "output": [1, 2, 3, 4, 5, 6, 7, 8]
+        "output":JSON.stringify( [1, 2, 3, 4, 5, 6, 7, 8])
       },
       {
         "input": [1],
-        "output": [1]
+        "output":JSON.stringify( [1])
       },
       {
         "input": [2, 1],
-        "output": [1, 2]
+        "output": JSON.stringify([1, 2])
       }
     ]
   },
@@ -136,23 +136,23 @@ let questionsData = [
     "testcasesList": [
       {
         "input": [1, [2, [3, 4], 5], 6],
-        "output": [1, 2, 3, 4, 5, 6]
+        "output": JSON.stringify([1, 2, 3, 4, 5, 6])
       },
       {
         "input": [[1, 2], [3, [4, [5, 6]], 7], 8],
-        "output": [1, 2, 3, 4, 5, 6, 7, 8]
+        "output": JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8])
       },
       {
         "input": [1, 2, 3, 4, 5],
-        "output": [1, 2, 3, 4, 5]
+        "output": JSON.stringify([1, 2, 3, 4, 5])
       },
       {
         "input": [[1, 2]],
-        "output": [1, 2]
+        "output":JSON.stringify([1, 2])
       },
       {
         "input": [],
-        "output": []
+        "output": JSON.stringify([])
       }
     ]
   },
@@ -161,23 +161,23 @@ let questionsData = [
     "methodName": "findPairs",
 
     "testcasesList": [    {      "input": [[3, 5, 9, 2, 8, 10, 1], 11],
-        "output": [[2, 9], [3, 8], [5, 6]]
+        "output": JSON.stringify([[2, 9], [3, 8], [5, 6]])
       },
       {
         "input": [[1, 2, 3, 4, 5, 6], 7],
-        "output": [[1, 6], [2, 5], [3, 4]]
+        "output": JSON.stringify([[1, 6], [2, 5], [3, 4]])
       },
       {
         "input": [[1, 2, 3, 4, 5, 6], 10],
-        "output": [[4, 6], [5, 5]]
+        "output":JSON.stringify( [[4, 6], [5, 5]])
       },
       {
         "input": [[1, 2, 3], 6],
-        "output": [[3, 3]]
+        "output": JSON.stringify([[3, 3]])
       },
       {
         "input": [[1, 2], 5],
-        "output": []
+        "output": JSON.stringify([])
       }
     ]
   },
