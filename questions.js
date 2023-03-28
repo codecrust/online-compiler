@@ -2,6 +2,7 @@ let questionsData = [
   {
     "question": "Write a JavaScript function named reverseString that takes a string as input and returns the reversed version of that string. For example, if the input is \"Hello World\", the function should return \"dlroW olleH\". You may not use the built-in reverse() method.",
     "methodName": "reverseString",
+    "returnType": "string",
     "testcasesList": [
       {
         "input": "hello world",
