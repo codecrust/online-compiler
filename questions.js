@@ -107,7 +107,7 @@ let questionsData = [
     ]
   },
   {
-    "question": "Write a JavaScript function named mergeSort that takes an array of integers as input and returns a new array that is sorted in ascending order using the merge sort algorithm. For example, if the input is [4, 2, 6, 5, 3], the function should return [2, 3, 4, 5, 6].Note: You may not use the built-in sort() method.",
+    "question": "Write a JavaScript function named mergeSort that takes an array of integers as input and returns a new array that is sorted in ascending order using sort algorithm. For example, if the input is [4, 2, 6, 5, 3], the function should return [2, 3, 4, 5, 6].Note: You may not use the built-in sort() method.",
   "methodName": "mergeSort",
     "testcasesList": [    {      "input": [4, 2, 6, 5, 3],
         "output": JSON.stringify([2, 3, 4, 5, 6])
