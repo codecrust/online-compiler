@@ -193,7 +193,6 @@ function check(token) {
 
 function checkBatch() {
 
-    pendingCaseFlag = false
     let tokenStr = ""
 
     //iterate on testcasesobjar and add token to tokenStr
@@ -344,11 +343,17 @@ function run(testObj) {
 
 
 }
-console.log(document.getElementById("lang").value)
 
+let isRunningFlag = false
+console.log(document.getElementById("lang").value)
 console.log(language_to_id[document.getElementById("lang").value])
 function runBatched() {
 
+    isRunningFlag = true;
+    setTimeout(() => {
+        processingIconStateChange();
+    }, 500)
+    addTestCasesTable()
     //disable run button
     document.getElementById("run").disabled = true;
 
@@ -417,7 +422,7 @@ function runBatched() {
 
 function addTestCasesTable() {
 
-    let pendingCaseFlag = false
+    let tempPendingCaseFlag = false
 
 
 
@@ -439,23 +444,28 @@ ${testCasesObjAr.map((testCaseObj, index) => {
 
 
 
-
             //  console.log("Comparing: " + testCaseObj.expectedOutput + " with " + testCaseObj.output);
 
             if ((testCaseObj.expectedOutput) == (testCaseObj.output))
                 testCaseObj.result = "✅"
             else if (testCaseObj.output == "Processing" || testCaseObj.output == "-") {
-                testCaseObj.result = "Pending"
-                pendingCaseFlag = true
+
+                tempPendingCaseFlag = true
+
+                if (isRunningFlag) {
+                    testCaseObj.result = processingIcon
+                }
+
             } else {
                 testCaseObj.result = "❌"
             }
 
+
             return `<tr id= test-case-${index} data-toggle="collapse" data-target="#${"test-" + index}-details" class="clickable">
-    <td>${JSON.stringify(testCaseObj.input)}</td>
-    <td>${testCaseObj.expectedOutput}</td>
-    <td>${testCaseObj.output}</td>
-    <td>${testCaseObj.result}</td>
+    <td class="text-center">${JSON.stringify(testCaseObj.input)}</td>
+    <td class="text-center">${testCaseObj.expectedOutput}</td>
+    <td class="text-center">${testCaseObj.output}</td>
+    <td class="text-center">${testCaseObj.result}</td>
 </tr>
 <tr>
 <td colspan="3" class="hiddenRow">
@@ -475,7 +485,7 @@ ${testCasesObjAr.map((testCaseObj, index) => {
 
     // add test case details to div
     testCasesObjAr.forEach((testCaseObj, index) => {
-        document.getElementById(`test-${index}-details`).innerHTML = `<pre>${testCaseObj.stdout}</pre>`
+        document.getElementById(`test-${index}-details`).innerHTML = `<pre><small>${testCaseObj.stdout}</small></pre>`
     })
 
     document.querySelectorAll(".clickable").forEach((el) => {
@@ -483,11 +493,12 @@ ${testCasesObjAr.map((testCaseObj, index) => {
             el.nextElementSibling.querySelector(".collapse").classList.toggle("show")
         })
     })
-
+    pendingCaseFlag = tempPendingCaseFlag
 
     if (!pendingCaseFlag) {
 
         console.log("all cases resolved")
+        isRunningFlag = false
         document.getElementById("test-case-0").nextElementSibling.querySelector(".collapse").classList.toggle("show")
 
         //enable run button
@@ -498,11 +509,92 @@ ${testCasesObjAr.map((testCaseObj, index) => {
 
 addTestCasesTable()
 
-//convert below code from jquery to js
-// $(document).ready(function(){
-//     $(".clickable").click(function(){
-//       $(this).next(".hiddenRow").find(".collapse").toggleClass("show");
-//     });
-//   });
 
-//convert above code from jquery to js
+//create a spinning cog animation using lottie
+//https://lottiefiles.com/1043-spinning-cog
+//https://lottiefiles.com/1043-spinning-cog
+
+
+
+
+
+function showInitialModal() {
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
+        // Show the modal on page load
+        modal.show();
+
+        // Enable the "Save changes" button only if both the name and email fields are filled in
+        var nameInput = document.getElementById('nameInput');
+        var emailInput = document.getElementById('emailInput');
+        var submitBtn = document.getElementById('submitBtn');
+
+        function toggleSubmitBtn() {
+            submitBtn.disabled = nameInput.value === '' || emailInput.value === '';
+        }
+
+        nameInput.addEventListener('input', toggleSubmitBtn);
+        emailInput.addEventListener('input', toggleSubmitBtn);
+
+        // When the "Save changes" button is clicked, submit the form and close the modal
+        submitBtn.addEventListener('click', function () {
+            if (nameInput.value !== '' && emailInput.value !== '') {
+                modal.hide();
+            }
+        });
+    });
+}
+
+let processingIcon = "•"
+
+
+//convert above setInterval to a function and call it from here
+function processingIconStateChange() {
+
+    if (processingIcon == "•")
+        processingIcon = "••"
+    else if (processingIcon == "••")
+        processingIcon = "•••"
+    else if (processingIcon == "•••")
+        processingIcon = "••••"
+    else if (processingIcon == "••••")
+        processingIcon = "•"
+
+    addTestCasesTable()
+
+    if (pendingCaseFlag)
+        setTimeout(() => {
+            processingIconStateChange();
+        }, 500)
+}
+
+
+
+//showInitialModal()
+
+function showCountDown() {
+    var countdownTime = 15 * 60;
+
+    // Update the countdown timer every second
+    var countdownInterval = setInterval(function () {
+        // Calculate the minutes and seconds remaining
+        var minutes = Math.floor(countdownTime / 60);
+        var seconds = countdownTime % 60;
+
+        // Display the remaining time in the countdown timer
+        document.getElementById('countdown').innerHTML = minutes + "m:" + (seconds < 10 ? "0" : "") + seconds + "s";
+
+        // Decrease the countdown time by one second
+        countdownTime--;
+
+        // If the countdown timer has reached zero, clear the interval and display a message
+        if (countdownTime < 0) {
+            clearInterval(countdownInterval);
+            document.getElementById('countdown').innerHTML = "Time's up!";
+        }
+    }, 1000);
+
+}
+showCountDown()
+
