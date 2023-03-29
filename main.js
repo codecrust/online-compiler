@@ -23,6 +23,8 @@ for (let i = 0; i < questionObj.testcasesList.length; i++) {
         result: "Pending"
     })
 }
+let pendingCaseFlag = false
+let codeSubmittedFlag = false
 
 
 
@@ -98,10 +100,10 @@ function decode(bytes) {
     }
 }
 
-function errorHandler(jqXHR, textStatus, errorThrown) {
-    $("#output").val(`${JSON.stringify(jqXHR, null, 4)}`);
-    $("#run").prop("disabled", false);
-}
+// function errorHandler(jqXHR, textStatus, errorThrown) {
+//     $("#output").val(`${JSON.stringify(jqXHR, null, 4)}`);
+//     $("#run").prop("disabled", false);
+// }
 
 
 
@@ -296,10 +298,6 @@ function checkBatch() {
 
 function run(testObj) {
 
-    //$("#run").prop("disabled", true);
-    //$("#output").val("⚙️ Creating submission...");
-
-
     var myHeaders = new Headers();
     myHeaders.append("x-rapidapi-host", " judge0-ce.p.rapidapi.com");
     myHeaders.append("x-rapidapi-key", API_KEY);
@@ -339,9 +337,6 @@ function run(testObj) {
         })
         .catch(error => console.log('error', error));
 
-
-
-
 }
 
 let isRunningFlag = false
@@ -350,15 +345,23 @@ console.log(language_to_id[document.getElementById("lang").value])
 function runBatched() {
 
     isRunningFlag = true;
+    pendingCaseFlag = true;
+    codeSubmittedFlag = false;
+
+    testCasesObjAr.forEach(testObj => {
+        testObj.stdout = "";
+        testObj.output = "-";
+    })
+
+    addTestCasesTable()
+
+
     setTimeout(() => {
         processingIconStateChange();
     }, 500)
     addTestCasesTable()
     //disable run button
     document.getElementById("run").disabled = true;
-
-    // $("#run").prop("disabled", true);
-    //$("#output").val("⚙️ Creating submission...");
 
 
     var myHeaders = new Headers();
@@ -422,7 +425,7 @@ function runBatched() {
 
 function addTestCasesTable() {
 
-    let tempPendingCaseFlag = false
+    let tempPendingCase = false
 
 
 
@@ -450,7 +453,7 @@ ${testCasesObjAr.map((testCaseObj, index) => {
                 testCaseObj.result = "✅"
             else if (testCaseObj.output == "Processing" || testCaseObj.output == "-") {
 
-                tempPendingCaseFlag = true
+                tempPendingCase = true
 
                 if (isRunningFlag) {
                     testCaseObj.result = processingIcon
@@ -493,14 +496,14 @@ ${testCasesObjAr.map((testCaseObj, index) => {
             el.nextElementSibling.querySelector(".collapse").classList.toggle("show")
         })
     })
-    pendingCaseFlag = tempPendingCaseFlag
+    pendingCaseFlag = tempPendingCase
 
     if (!pendingCaseFlag) {
 
         console.log("all cases resolved")
         isRunningFlag = false
         document.getElementById("test-case-0").nextElementSibling.querySelector(".collapse").classList.toggle("show")
-
+        submitCode()
         //enable run button
         document.getElementById("run").disabled = false;
     }
@@ -509,10 +512,6 @@ ${testCasesObjAr.map((testCaseObj, index) => {
 
 addTestCasesTable()
 
-
-//create a spinning cog animation using lottie
-//https://lottiefiles.com/1043-spinning-cog
-//https://lottiefiles.com/1043-spinning-cog
 
 
 
@@ -541,13 +540,13 @@ function showInitialModal() {
         submitBtn.addEventListener('click', function () {
             if (nameInput.value !== '' && emailInput.value !== '') {
                 modal.hide();
+                submitUser()
             }
         });
     });
 }
 
 let processingIcon = "•"
-
 
 //convert above setInterval to a function and call it from here
 function processingIconStateChange() {
@@ -571,7 +570,7 @@ function processingIconStateChange() {
 
 
 
-//showInitialModal()
+showInitialModal()
 
 function showCountDown() {
     var countdownTime = 15 * 60;
@@ -598,3 +597,72 @@ function showCountDown() {
 }
 showCountDown()
 
+let candidateId = ""
+
+
+//make a post call to localhost:3000/userStarted
+function submitUser() {
+    let name = document.getElementById("nameInput").value
+    let email = document.getElementById("emailInput").value
+
+    let userObj = {
+        name: name,
+        email: email
+    }
+
+    fetch("http://localhost:8080/userStarted", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userObj)
+    }).then((response) => {
+        return response.json()
+    }).then((data) => {
+        console.log(data)
+        candidateId = data.candidateId
+    })
+}
+
+
+//make a post call to localhost:3000/userSubmit send editor value
+function submitCode() {
+
+    if (codeSubmittedFlag)
+        return
+    else
+        codeSubmittedFlag = true
+
+    let code = encode(editor.getValue())
+
+    // count number of test cases passed and failed
+    let result = {
+        passed: 0,
+        failed: 0
+    }
+
+    testCasesObjAr.forEach((testCaseObj, index) => {
+        if (testCaseObj.result == "✅")
+            result.passed++
+        else
+            result.failed++
+    })
+
+    let userObj = {
+        candidateId: candidateId,
+        code: code,
+        result: result
+    }
+
+    fetch("http://localhost:8080/userSubmit", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userObj)
+    }).then((response) => {
+        return response.json()
+    }).then((data) => {
+        console.log(data)
+    })
+}
