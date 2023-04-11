@@ -1,6 +1,5 @@
-API_KEY = "e81b1c7bf8mshcb853477b02ef3ap1e5a73jsn45c6c7f5cdcb"
-//"3a741d4f13msh46af1ea44bc1bdcp1bf020jsnf18723627030";
-
+API_KEY = "3a741d4f13msh46af1ea44bc1bdcp1bf020jsnf18723627030";
+//"e81b1c7bf8mshcb853477b02ef3ap1e5a73jsn45c6c7f5cdcb"
 
 //console.log(questionsData)
 //import json from questions.json
@@ -570,7 +569,7 @@ function processingIconStateChange() {
 
 
 
-showInitialModal()
+//showInitialModal()
 
 function showCountDown() {
     var countdownTime = 15 * 60;
