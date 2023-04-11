@@ -502,7 +502,7 @@ ${testCasesObjAr.map((testCaseObj, index) => {
         console.log("all cases resolved")
         isRunningFlag = false
         document.getElementById("test-case-0").nextElementSibling.querySelector(".collapse").classList.toggle("show")
-        submitCode()
+        // submitCode()
         //enable run button
         document.getElementById("run").disabled = false;
     }
@@ -525,21 +525,46 @@ function showInitialModal() {
 
         // Enable the "Save changes" button only if both the name and email fields are filled in
         var nameInput = document.getElementById('nameInput');
-        var emailInput = document.getElementById('emailInput');
+        var tokenInput = document.getElementById('tokenInput');
         var submitBtn = document.getElementById('submitBtn');
 
         function toggleSubmitBtn() {
-            submitBtn.disabled = nameInput.value === '' || emailInput.value === '';
+            submitBtn.disabled = nameInput.value === '' || tokenInput.value === '';
         }
 
         nameInput.addEventListener('input', toggleSubmitBtn);
-        emailInput.addEventListener('input', toggleSubmitBtn);
+        tokenInput.addEventListener('input', toggleSubmitBtn);
+
+        //convert token input value to int
+
+
 
         // When the "Save changes" button is clicked, submit the form and close the modal
         submitBtn.addEventListener('click', function () {
-            if (nameInput.value !== '' && emailInput.value !== '') {
-                modal.hide();
-                submitUser()
+            if (nameInput.value !== '' && tokenInput.value !== '') {
+
+
+                let tokens = (tokenInput.value).split("-")
+
+
+                if (tokens.length == 4) {
+                    let a = parseInt(tokens[0])
+                    let b = parseInt(tokens[1])
+                    let c = parseInt(tokens[2])
+                    let d = parseInt(tokens[3])
+
+                    if (a + b + c + d == 10000) {
+                        showCountDown()
+
+                        modal.hide();
+                    }
+                }
+
+
+
+
+
+                //submitUser()
             }
         });
     });
@@ -569,7 +594,7 @@ function processingIconStateChange() {
 
 
 
-//showInitialModal()
+showInitialModal()
 
 function showCountDown() {
     var countdownTime = 15 * 60;
@@ -594,7 +619,6 @@ function showCountDown() {
     }, 1000);
 
 }
-showCountDown()
 
 let candidateId = ""
 
