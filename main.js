@@ -1,5 +1,5 @@
-API_KEY = "3a741d4f13msh46af1ea44bc1bdcp1bf020jsnf18723627030";
-//"e81b1c7bf8mshcb853477b02ef3ap1e5a73jsn45c6c7f5cdcb"
+API_KEY = "e81b1c7bf8mshcb853477b02ef3ap1e5a73jsn45c6c7f5cdcb"
+//"3a741d4f13msh46af1ea44bc1bdcp1bf020jsnf18723627030";
 
 //console.log(questionsData)
 //import json from questions.json
@@ -543,28 +543,35 @@ function showInitialModal() {
         submitBtn.addEventListener('click', function () {
             if (nameInput.value !== '' && tokenInput.value !== '') {
 
-
-                let tokens = (tokenInput.value).split("-")
-
-
-                if (tokens.length == 4) {
-                    let a = parseInt(tokens[0])
-                    let b = parseInt(tokens[1])
-                    let c = parseInt(tokens[2])
-                    let d = parseInt(tokens[3])
-
-                    if (a + b + c + d == 10000) {
+                console.log("sending request to validate token")
+                //validate token
+                fetch('http://139.84.173.85:9090/user/validate', {
+                        
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            userId: nameInput.value,
+                            token: tokenInput.value,
+                            userRole: 0
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        if (data.status == "success") {
+         
                         showCountDown()
 
                         modal.hide();
                     }
-                }
+                    else{
+                        alert("Invalid Token")
+                    }
+                    })
+                    .catch(error => console.log('error', error));
 
-
-
-
-
-                //submitUser()
             }
         });
     });

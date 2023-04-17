@@ -28,7 +28,7 @@
     "question": "Write a JavaScript function named findPairs that takes an array of integers and a target sum as input and returns an array of pairs of integers whose sum is equal to the target. For example, if the input array is [3, 5, 9, 2, 8, 10, 1] and the target sum is 11, the function should return [[3, 8], [5, 6], [9, 2]].\n\nNote: The output array should contain unique pairs only and the pairs should be sorted in ascending order.",
     "methodName": "findPairs",
 
-    "testcasesList": [    {      "input": [[3, 5, 9, 2, 8, 10, 1], 11],
+    "testcasesList": [    {"input": [[3, 5, 9, 2, 8, 10, 1], 11],
         "output": JSON.stringify([[2, 9], [3, 8], [5, 6]])
       },
       {
