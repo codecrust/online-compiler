@@ -560,7 +560,7 @@ function showInitialModal() {
                     .then(response => response.json())
                     .then(data => {
                         console.log(data)
-                        if (data.status == "success") {
+                        if (data.msg =="Authorized Access") {
          
                         showCountDown()
 
