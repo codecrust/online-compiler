@@ -545,14 +545,14 @@ function showInitialModal() {
 
                 console.log("sending request to validate token")
                 //validate token
-                fetch('http://139.84.173.85:9090/user/validate', {
+                fetch('http://139.84.173.85:9091/api/user/login', {
                         
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            userId: nameInput.value,
+                            emailId: nameInput.value,
                             token: tokenInput.value,
                             userRole: 0
                         })
