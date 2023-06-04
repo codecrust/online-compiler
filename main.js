@@ -1,3 +1,18 @@
+
+window.addEventListener('beforeunload', function (event) {
+    event.preventDefault(); // Cancel the default behavior
+
+    // Custom message to display in the alert
+    var confirmationMessage = 'Are you sure you want to leave this page?';
+
+    // Display the alert
+    event.returnValue = confirmationMessage;
+    return confirmationMessage;
+});
+
+
+
+
 API_KEY = "e81b1c7bf8mshcb853477b02ef3ap1e5a73jsn45c6c7f5cdcb"
 //"3a741d4f13msh46af1ea44bc1bdcp1bf020jsnf18723627030";
 
@@ -482,7 +497,7 @@ ${testCasesObjAr.map((testCaseObj, index) => {
         }
 
 </tbody >
-</table > `
+</table >`
 
 
     // add test case details to div
@@ -509,11 +524,8 @@ ${testCasesObjAr.map((testCaseObj, index) => {
 
 }
 
+
 addTestCasesTable()
-
-
-
-
 
 
 function showInitialModal() {
@@ -545,30 +557,28 @@ function showInitialModal() {
 
                 console.log("sending request to validate token")
                 //validate token
-                fetch('http://139.84.173.85:9091/api/user/login', {
-                        
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            emailId: nameInput.value,
-                            token: tokenInput.value,
-                            userRole: 0
-                        })
+                fetch('http://tokenvalidator.gamesapp.co', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: "validate",
+                        token: tokenInput.value
                     })
+                })
                     .then(response => response.json())
                     .then(data => {
                         console.log(data)
-                        if (data.msg =="Authorized Access") {
-         
-                        showCountDown()
 
-                        modal.hide();
-                    }
-                    else{
-                        alert("Invalid Token")
-                    }
+                        if (data.msg == "Validation Success") {
+                            showCountDown()
+
+                            modal.hide();
+                        }
+                        else {
+                            alert("Invalid Token")
+                        }
                     })
                     .catch(error => console.log('error', error));
 
@@ -633,25 +643,20 @@ let candidateId = ""
 //make a post call to localhost:3000/userStarted
 function submitUser() {
     let name = document.getElementById("nameInput").value
-    let email = document.getElementById("emailInput").value
+    let email = document.getElementById("tokenInput").value
 
-    let userObj = {
-        name: name,
-        email: email
+
+
+    let logReq = {
+        data: {
+            name: name,
+            email: email
+        },
+        collection: "submitUser"
     }
 
-    fetch("http://localhost:8080/userStarted", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userObj)
-    }).then((response) => {
-        return response.json()
-    }).then((data) => {
-        console.log(data)
-        candidateId = data.candidateId
-    })
+    addToLogs(logReq)
+
 }
 
 
@@ -678,18 +683,29 @@ function submitCode() {
             result.failed++
     })
 
-    let userObj = {
-        candidateId: candidateId,
-        code: code,
-        result: result
+    let logReq = {
+        data: {
+            candidateId: candidateId,
+            code: code,
+            result: result
+        },
+        collection: "codeSubmission"
+
     }
 
-    fetch("http://localhost:8080/userSubmit", {
+    addToLogs(logReq)
+
+
+}
+
+
+function addToLogs(logReq) {
+    fetch("http://logstore.gamesapp.in", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(userObj)
+        body: JSON.stringify(logReq)
     }).then((response) => {
         return response.json()
     }).then((data) => {
