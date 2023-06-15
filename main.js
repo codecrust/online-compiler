@@ -1,14 +1,14 @@
 
-window.addEventListener('beforeunload', function (event) {
-    event.preventDefault(); // Cancel the default behavior
+// window.addEventListener('beforeunload', function (event) {
+//    // event.preventDefault(); // Cancel the default behavior
 
-    // Custom message to display in the alert
-    var confirmationMessage = 'Are you sure you want to leave this page?';
+//     // Custom message to display in the alert
+//     var confirmationMessage = 'Are you sure you want to leave this page?';
 
-    // Display the alert
-    event.returnValue = confirmationMessage;
-    return confirmationMessage;
-});
+//     // Display the alert
+//     event.returnValue = confirmationMessage;
+//     return confirmationMessage;
+// });
 
 
 
@@ -360,7 +360,7 @@ function runBatched() {
 
     isRunningFlag = true;
     pendingCaseFlag = true;
-    codeSubmittedFlag = false;
+    codeSubmittedFlag = true;
 
     testCasesObjAr.forEach(testObj => {
         testObj.stdout = "";
@@ -425,7 +425,10 @@ function runBatched() {
             //document.getElementById("output").value += "\n🎉 Submission created."
 
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {
+            runBatched()
+            console.log(error)
+    });
 
 
 
@@ -517,7 +520,7 @@ ${testCasesObjAr.map((testCaseObj, index) => {
         console.log("all cases resolved")
         isRunningFlag = false
         document.getElementById("test-case-0").nextElementSibling.querySelector(".collapse").classList.toggle("show")
-        // submitCode()
+        submitCode()
         //enable run button
         document.getElementById("run").disabled = false;
     }
@@ -549,6 +552,35 @@ function showInitialModal() {
 
         //convert token input value to int
 
+        function fetchFromPostAPI(token) {
+            fetch('http://tokenvalidator.gamesapp.co', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "type": "validate",
+                    "token": token
+                })
+            })
+                .then(res => {
+                    res = res.json()
+                    return res
+                })
+                .then(res => {
+                    console.log(res)
+                    if (res.msg == "Validation Success") {
+                        showCountDown()
+                        modal.hide();
+                    }
+                    else {
+                        alert("Invalid Token")
+                    }
+                })
+                .catch(err => {
+                    alert("Error contact Recruiter")
+                })
+        }
 
 
         // When the "Save changes" button is clicked, submit the form and close the modal
@@ -556,36 +588,16 @@ function showInitialModal() {
             if (nameInput.value !== '' && tokenInput.value !== '') {
 
                 console.log("sending request to validate token")
-                //validate token
-                fetch('http://tokenvalidator.gamesapp.co', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        type: "validate",
-                        token: tokenInput.value
-                    })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data)
-
-                        if (data.msg == "Validation Success") {
-                            showCountDown()
-
-                            modal.hide();
-                        }
-                        else {
-                            alert("Invalid Token")
-                        }
-                    })
-                    .catch(error => console.log('error', error));
-
+                fetchFromPostAPI(tokenInput.value)
             }
-        });
-    });
+        })
+    })
 }
+
+
+
+
+
 
 let processingIcon = "•"
 
@@ -642,10 +654,12 @@ let candidateId = ""
 
 //make a post call to localhost:3000/userStarted
 function submitUser() {
+    console.log("submit user")
+
     let name = document.getElementById("nameInput").value
     let email = document.getElementById("tokenInput").value
 
-
+    candidateId = name
 
     let logReq = {
         data: {
@@ -654,7 +668,6 @@ function submitUser() {
         },
         collection: "submitUser"
     }
-
     addToLogs(logReq)
 
 }
@@ -662,11 +675,7 @@ function submitUser() {
 
 //make a post call to localhost:3000/userSubmit send editor value
 function submitCode() {
-
-    if (codeSubmittedFlag)
-        return
-    else
-        codeSubmittedFlag = true
+console.log("submit Code")
 
     let code = encode(editor.getValue())
 
@@ -690,20 +699,23 @@ function submitCode() {
             result: result
         },
         collection: "codeSubmission"
-
     }
-
     addToLogs(logReq)
-
 
 }
 
 
 function addToLogs(logReq) {
-    fetch("http://logstore.gamesapp.in", {
+
+    console.log("adding to logs")
+    console.log(logReq)
+    fetch("https://logstore.gamesapp.in", {
         method: 'POST',
+
+        //set no cors headers
+        // mode: 'no-cors',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(logReq)
     }).then((response) => {
